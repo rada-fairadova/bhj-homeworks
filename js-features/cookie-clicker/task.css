@@ -1,0 +1,4 @@
+.clicker__cookie.clicked {
+    transform: scale(1.2);
+    transition: transform 0.1s ease;
+}
