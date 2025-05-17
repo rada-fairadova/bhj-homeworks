@@ -17,18 +17,26 @@ class Game {
   }
 
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода символа вызываем this.success()
-      При неправильном вводе символа - this.fail();
-      DOM-элемент текущего символа находится в свойстве this.currentSymbol.
-     */
+    document.addEventListener('keyup', (event) => {
+      // Получаем введенный символ и приводим к нижнему регистру
+      const pressedKey = event.key.toLowerCase();
+      
+      // Получаем текущий символ, который нужно ввести
+      const currentChar = this.currentSymbol.textContent.toLowerCase();
+      
+      // Сравниваем символы
+      if (pressedKey === currentChar) {
+        this.success();
+      } else {
+        this.fail();
+      }
+    });
   }
 
   success() {
-    if(this.currentSymbol.classList.contains("symbol_current")) this.currentSymbol.classList.remove("symbol_current");
+    if(this.currentSymbol.classList.contains("symbol_current")) {
+      this.currentSymbol.classList.remove("symbol_current");
+    }
     this.currentSymbol.classList.add('symbol_correct');
     this.currentSymbol = this.currentSymbol.nextElementSibling;
 
@@ -45,16 +53,22 @@ class Game {
   }
 
   fail() {
-    if (++this.lossElement.textContent === 5) {
+    this.wordElement.classList.add('word_incorrect');
+    
+    setTimeout(() => {
+      this.wordElement.classList.remove('word_incorrect');
+    }, 200);
+
+    if (++this.lossElement.textContent === 3) {
       alert('Вы проиграли!');
       this.reset();
+    } else {
+      this.setNewWord();
     }
-    this.setNewWord();
   }
 
   setNewWord() {
     const word = this.getWord();
-
     this.renderWord(word);
   }
 
@@ -90,5 +104,4 @@ class Game {
   }
 }
 
-new Game(document.getElementById('game'))
-
+new Game(document.getElementById('game'));
